@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>羽茜考勤小助手</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="羽茜考勤小助手首页">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32"><path d="M7 4h18v24H7z"/><path d="M11 9h10M11 14h10M11 19h6"/><circle cx="22" cy="22" r="3"/></svg>
+          </span>
+          <span>羽茜考勤小助手</span>
+        </a>
+        <div class="privacy-note">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 4.8 2.9 8.1 7 10 4.1-1.9 7-5.2 7-10V6l-7-3Z"/><path d="m9.2 12 1.8 1.8 4-4"/></svg>
+          <span>仅在本机解析，不上传文件</span>
+        </div>
+      </header>
+
+      <main>
+        <section class="upload-view" id="uploadView">
+          <div class="hero-copy">
+            <p class="eyebrow">LOCAL ATTENDANCE VIEWER</p>
+            <h1>把一整月的打卡，<br /><span>摊开来看。</span></h1>
+            <p class="hero-description">上传标准考勤报表，自动识别“考勤记录”页。无需安装、无需联网，所有处理都在你的浏览器中完成。</p>
+            <div class="format-strip" aria-label="支持的格式">
+              <span>.XLS</span><span>.XLSX</span><span>LOCAL ONLY</span>
+            </div>
+          </div>
+
+          <div class="upload-card-wrap">
+            <label class="drop-zone" id="dropZone" for="fileInput">
+              <input id="fileInput" type="file" accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" />
+              <span class="drop-illustration" aria-hidden="true">
+                <svg viewBox="0 0 64 64"><path d="M13 7h29l9 9v41H13z"/><path d="M42 7v10h9M23 29h18M23 37h18M23 45h11"/></svg>
+              </span>
+              <strong>拖入考勤报表</strong>
+              <span>或点击选择本地文件</span>
+              <span class="upload-button">选择 Excel 文件</span>
+            </label>
+          </div>
+        </section>
+
+        <section class="dashboard" id="dashboard" hidden>
+          <div class="dashboard-heading">
+            <div>
+              <button class="back-button" id="backButton" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+                重新上传
+              </button>
+              <p class="eyebrow">ATTENDANCE OVERVIEW</p>
+              <h1 id="dashboardTitle">考勤记录一览</h1>
+              <p class="file-meta"><span id="fileName"></span><span class="meta-divider"></span><span id="periodText"></span></p>
+            </div>
+            <div class="heading-actions">
+              <button class="secondary-button" id="exportButton" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 21h14"/></svg>
+                导出明细
+              </button>
+            </div>
+          </div>
+
+          <section class="summary-grid" aria-label="考勤摘要">
+            <article class="summary-card summary-card--ink">
+              <p>员工</p><strong id="employeeCount">0</strong><span>本月在册人数</span>
+            </article>
+            <article class="summary-card">
+              <p>打卡次数</p><strong id="punchCount">0</strong><span>原始时间点总数</span>
+            </article>
+            <article class="summary-card">
+              <p>有记录</p><strong id="recordedDays">0</strong><span>人次 · 天</span>
+            </article>
+            <article class="summary-card summary-card--amber">
+              <p>无打卡</p><strong id="emptyDays">0</strong><span>自然日人次 · 非缺勤判断</span>
+            </article>
+          </section>
+
+          <section class="coverage-panel paper-panel">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">DAILY COVERAGE</p>
+                <h2>每日记录覆盖</h2>
+              </div>
+              <p>柱高表示当天有打卡记录的员工人数</p>
+            </div>
+            <div class="coverage-chart" id="coverageChart" aria-label="每日有打卡记录人数柱状图"></div>
+          </section>
+
+          <section class="records-layout">
+            <div class="matrix-panel paper-panel">
+              <div class="section-heading matrix-heading">
+                <div>
+                  <p class="section-kicker">PUNCH CARD MATRIX</p>
+                  <h2>月度打卡底片</h2>
+                </div>
+                <div class="legend" aria-label="图例">
+                  <span><i class="legend-dot status-pair"></i>2 次</span>
+                  <span><i class="legend-dot status-single"></i>1 次</span>
+                  <span><i class="legend-dot status-multiple"></i>3 次及以上</span>
+                  <span><i class="legend-dot status-empty"></i>0 次</span>
+                </div>
+              </div>
+
+              <div class="toolbar">
+                <label class="search-field">
+                  <span class="sr-only">搜索姓名或工号</span>
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
+                  <input id="searchInput" type="search" placeholder="搜索姓名或工号" autocomplete="off" />
+                </label>
+                <div class="filter-group" role="group" aria-label="记录状态筛选">
+                  <button class="filter-chip is-active" type="button" data-filter="all">全部</button>
+                  <button class="filter-chip" type="button" data-filter="empty">含无记录</button>
+                  <button class="filter-chip" type="button" data-filter="single">含单次</button>
+                  <button class="filter-chip" type="button" data-filter="multiple">含多次</button>
+                </div>
+              </div>
+
+              <div class="matrix-scroll" id="matrixScroll">
+                <div class="matrix" id="attendanceMatrix"></div>
+              </div>
+              <p class="matrix-hint">点击任意色块查看该员工整月打卡详情；横向滚动可查看完整月份。</p>
+            </div>
+
+            <aside class="employee-panel paper-panel" id="employeePanel" aria-live="polite">
+              <div class="employee-empty">
+                <span class="empty-glyph" aria-hidden="true"></span>
+                <h2>选择一名员工</h2>
+                <p>点击左侧矩阵中的任意一行，查看整月打卡时间。</p>
+              </div>
+            </aside>
+          </section>
+        </section>
+      </main>
+
+      <footer>羽茜考勤小助手 · 本地考勤工具</footer>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./vendor/xlsx.full.min.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
