@@ -35,17 +35,6 @@
 - `app.js`：Excel 解析和交互逻辑
 - `parser.js`：报表解析核心
 - `vendor/xlsx.full.min.js`：离线 Excel 解析库
-- `build-standalone.cjs`：生成可直接分享的单文件 HTML
-
-## 打包分享
-
-在项目目录运行：
-
-```bash
-node build-standalone.cjs
-```
-
-将在下载目录生成 `羽茜考勤小助手.html`。该文件已内嵌页面样式、业务代码和 Excel 解析库，可直接发送给他人，双击后用浏览器运行。
 
 ## 部署到 GitHub Pages
 
