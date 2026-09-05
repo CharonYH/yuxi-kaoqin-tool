@@ -73,10 +73,10 @@
               <p>打卡次数</p><strong id="punchCount">0</strong><span>原始时间点总数</span>
             </article>
             <article class="summary-card">
-              <p>有记录</p><strong id="recordedDays">0</strong><span>人次 · 天</span>
+              <p>有记录</p><strong id="recordedDays">0</strong><span>自然日人次</span>
             </article>
             <article class="summary-card summary-card--amber">
-              <p>无打卡</p><strong id="emptyDays">0</strong><span>自然日人次 · 非缺勤判断</span>
+              <p>无记录</p><strong id="emptyDays">0</strong><span>自然日人次</span>
             </article>
           </section>
 
@@ -112,18 +112,34 @@
                   <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
                   <input id="searchInput" type="search" placeholder="搜索姓名或工号" autocomplete="off" />
                 </label>
+                <label class="select-field">
+                  <span class="select-label">排序</span>
+                  <select id="sortSelect">
+                    <option value="original">报表顺序</option>
+                    <option value="name">姓名排序</option>
+                  </select>
+                </label>
                 <div class="filter-group" role="group" aria-label="记录状态筛选">
                   <button class="filter-chip is-active" type="button" data-filter="all">全部</button>
-                  <button class="filter-chip" type="button" data-filter="empty">含无记录</button>
-                  <button class="filter-chip" type="button" data-filter="single">含单次</button>
+                  <button class="filter-chip" type="button" data-filter="empty">含 0 次</button>
+                  <button class="filter-chip" type="button" data-filter="single">含 1 次</button>
                   <button class="filter-chip" type="button" data-filter="multiple">含多次</button>
                 </div>
+              </div>
+              <div class="scope-row">
+                <div class="scope-group" role="group" aria-label="日期范围">
+                  <span>日期范围</span>
+                  <button class="scope-chip is-active" type="button" data-scope="all">整月</button>
+                  <button class="scope-chip" type="button" data-scope="workday">周一至周五</button>
+                  <button class="scope-chip" type="button" data-scope="weekend">周末</button>
+                </div>
+                <span class="result-count" id="resultCount"></span>
               </div>
 
               <div class="matrix-scroll" id="matrixScroll">
                 <div class="matrix" id="attendanceMatrix"></div>
               </div>
-              <p class="matrix-hint">点击任意色块查看该员工整月打卡详情；横向滚动可查看完整月份。</p>
+              <p class="matrix-hint">数字表示当天原始打卡次数。点击任意格查看具体打卡时间。</p>
             </div>
 
             <aside class="employee-panel paper-panel" id="employeePanel" aria-live="polite">
@@ -142,6 +158,7 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
     <script src="./vendor/xlsx.full.min.js"></script>
+    <script src="./parser.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
